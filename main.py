@@ -1,6 +1,6 @@
 import os
-from multi_agent_ai_system.memory.shared_memory import SharedMemory
-from multi_agent_ai_system.agents.classifier_agent import ClassifierAgent
+from memory.shared_memory import SharedMemory
+from agents.classifier_agent import ClassifierAgent
 import re
 
 def run_demo():

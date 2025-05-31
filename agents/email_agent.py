@@ -1,4 +1,4 @@
-from multi_agent_ai_system.memory.shared_memory import SharedMemory
+from memory.shared_memory import SharedMemory
 import re
 
 class EmailAgent:

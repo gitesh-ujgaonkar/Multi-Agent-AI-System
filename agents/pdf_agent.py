@@ -1,5 +1,5 @@
 import re
-from multi_agent_ai_system.memory.shared_memory import SharedMemory
+from memory.shared_memory import SharedMemory
 
 class PDFAgent:
     def __init__(self, shared_memory: SharedMemory):

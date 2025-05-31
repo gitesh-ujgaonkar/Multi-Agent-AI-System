@@ -3,7 +3,7 @@ import sqlite3
 import os
 import datetime
 
-# No import changes needed here; this is the base of the memory module.
+# Flat structure: no package prefix needed for imports.
 
 class SharedMemory:
     def __init__(self, db_path=None):

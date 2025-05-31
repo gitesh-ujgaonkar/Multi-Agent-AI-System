@@ -1,11 +1,12 @@
 import os
 import datetime
-from multi_agent_ai_system.memory.shared_memory import SharedMemory
-from multi_agent_ai_system.agents.json_agent import JSONAgent
-from multi_agent_ai_system.agents.email_agent import EmailAgent
-from multi_agent_ai_system.agents.pdf_agent import PDFAgent
+from memory.shared_memory import SharedMemory
+from agents.json_agent import JSONAgent
+from agents.email_agent import EmailAgent
+from agents.pdf_agent import PDFAgent
 import pdfplumber
-import openai
+import transformers
+import torch
 
 class ClassifierAgent:
     def __init__(self, shared_memory: SharedMemory):
@@ -13,7 +14,11 @@ class ClassifierAgent:
         self.json_agent = JSONAgent(shared_memory)
         self.email_agent = EmailAgent(shared_memory)
         self.pdf_agent = PDFAgent(shared_memory)
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        self.intent_model = transformers.pipeline(
+            "text-classification",
+            model="bhadresh-savani/distilbert-base-uncased-emotion",
+            top_k=None
+        )
 
     def classify_format(self, file_path: str) -> str:
         ext = os.path.splitext(file_path)[1].lower()
@@ -37,19 +42,14 @@ class ClassifierAgent:
             return 'Complaint'
         elif 'regulation' in lowered:
             return 'Regulation'
-        # LLM fallback
-        if openai.api_key:
-            try:
-                prompt = f"Classify the intent of this {file_format} document. Possible intents: Invoice, RFQ, Complaint, Regulation, Other.\nContent:\n{content[:1000]}"
-                resp = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=[{"role": "user", "content": prompt}],
-                    max_tokens=10
-                )
-                intent = resp['choices'][0]['message']['content'].strip()
-                return intent
-            except Exception as e:
-                print(f"[LLM intent detection failed]: {e}")
+        # Hugging Face fallback
+        try:
+            result = self.intent_model(content[:512])
+            if isinstance(result, list) and len(result) > 0:
+                label = result[0][0]['label'] if isinstance(result[0], list) else result[0]['label']
+                return label
+        except Exception as e:
+            print(f"[HF intent detection failed]: {e}")
         return 'Unknown'
 
     def log_and_route(self, file_path: str, thread_id=None):
