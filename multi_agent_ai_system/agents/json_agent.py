@@ -1,5 +1,5 @@
 import json
-from ..memory.shared_memory import SharedMemory
+from multi_agent_ai_system.memory.shared_memory import SharedMemory
 
 REQUIRED_FIELDS = ["rfq_id", "requester", "items", "due_date"]
 

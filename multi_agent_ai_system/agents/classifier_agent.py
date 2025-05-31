@@ -1,8 +1,8 @@
 import os
 import datetime
-from ..memory.shared_memory import SharedMemory
-from .json_agent import JSONAgent
-from .email_agent import EmailAgent
+from multi_agent_ai_system.memory.shared_memory import SharedMemory
+from multi_agent_ai_system.agents.json_agent import JSONAgent
+from multi_agent_ai_system.agents.email_agent import EmailAgent
 import pdfplumber
 
 class ClassifierAgent:
