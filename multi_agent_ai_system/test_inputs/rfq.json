@@ -1,0 +1,9 @@
+{
+  "rfq_id": "RFQ-2024-001",
+  "requester": "Acme Corp",
+  "items": [
+    {"item": "Widget A", "quantity": 100},
+    {"item": "Widget B", "quantity": 50}
+  ],
+  "due_date": "2024-07-01"
+} 
