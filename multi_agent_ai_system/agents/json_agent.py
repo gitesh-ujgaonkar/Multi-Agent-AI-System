@@ -7,7 +7,7 @@ class JSONAgent:
     def __init__(self, shared_memory: SharedMemory):
         self.shared_memory = shared_memory
 
-    def process(self, content: str, source: str):
+    def process(self, content: str, source: str, thread_id=None):
         try:
             data = json.loads(content)
             extracted_fields = {k: data.get(k) for k in data}
@@ -20,7 +20,8 @@ class JSONAgent:
             'source': source,
             'file_format': 'JSON',
             'extracted_fields': extracted_fields,
-            'flags': flags
+            'flags': flags,
+            'thread_id': thread_id
         }
         self.shared_memory.log(log_entry)
         print(f"[JSONAgent] Processed {source}: {flags}") 

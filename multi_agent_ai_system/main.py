@@ -1,6 +1,7 @@
 import os
 from multi_agent_ai_system.memory.shared_memory import SharedMemory
 from multi_agent_ai_system.agents.classifier_agent import ClassifierAgent
+import re
 
 def run_demo():
     shared_memory = SharedMemory()
@@ -12,10 +13,13 @@ def run_demo():
         os.path.join(test_dir, 'complaint_email.txt')
     ]
     for file_path in test_files:
-        if os.path.exists(file_path):
-            classifier.log_and_route(file_path)
-        else:
-            print(f"[Demo] Test file not found: {file_path}")
+        thread_id = None
+        if file_path.endswith('.txt'):
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+            subject_match = re.search(r'Subject: (.+)', content)
+            thread_id = subject_match.group(1).strip() if subject_match else None
+        classifier.log_and_route(file_path, thread_id=thread_id)
     print("\n[SharedMemory Snapshot]")
     print(shared_memory.snapshot())
 

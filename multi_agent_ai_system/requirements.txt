@@ -4,3 +4,5 @@ openai
 python-dotenv
 pydantic
 sqlite3 
+transformers
+torch 
